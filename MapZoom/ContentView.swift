@@ -31,29 +31,27 @@ struct ContentView: View {
   ]
   
   var body: some View {
-    ZStack{
+    VStack (alignment: .center, spacing: 0){
       MapView(coordinate: self.locations[selectedSegment].coordinate, span: spanLevel)
         .scaleEffect(CGFloat(zoomLevel), anchor: UnitPoint(x: 0.5, y: 0.5))
-      VStack(alignment: .leading, spacing: 0){
-        Spacer()
-        Group{
-          HStack{
-            Text("Span")
-            Slider(value: $spanLevel, in: 0.001...0.01, step: 0.001)
+        .blendMode(.sourceAtop)
+      Group{
+        HStack{
+          Text("Span")
+          Slider(value: $spanLevel, in: 0.001...0.01, step: 0.001)
+        }
+        .foregroundColor(.white)
+        HStack{
+          Text("Zoom")
+          Slider(value: $zoomLevel, in: 1.0...10, step: 0.5)
+        }
+        .foregroundColor(.white)
+        Picker(selection: $selectedSegment, label: Text("Locations")) {
+          ForEach(0 ..< locations.count) {
+            Text(self.locations[$0].title)
           }
-          .foregroundColor(.white)
-          HStack{
-            Text("Zoom")
-            Slider(value: $zoomLevel, in: 1.0...10, step: 0.5)
-          }
-          .foregroundColor(.white)
-          Picker(selection: $selectedSegment, label: Text("Locations")) {
-            ForEach(0 ..< locations.count) {
-              Text(self.locations[$0].title)
-            }
-          }.pickerStyle(SegmentedPickerStyle())
-        }.background(Color.gray)
-      }
+        }.pickerStyle(SegmentedPickerStyle())
+      }.background(Color.gray)
     }
   }
 }
